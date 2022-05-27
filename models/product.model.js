@@ -1,13 +1,17 @@
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
   const Product = sequelize.define("product", {
     image: {
-      type: Sequelize.BLOB("long"),
+      type: DataTypes.TEXT,
     },
     description: {
-      type: Sequelize.TEXT,
+      type: DataTypes.TEXT,
     },
     price: {
-      type: Sequelize.DECIMAL(10,2),
+      type: DataTypes.DECIMAL(10,2),
+    },
+    categoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
   });
   return Product;

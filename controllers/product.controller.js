@@ -1,28 +1,36 @@
 const db = require("../models");
+const path = require("path");
 const Product = db.product;
 const Category = db.category;
 const SubCategory = db.sub_category;
-const Op = db.Sequelize.Op;
 
 // Create and Save a new Product
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.title) {
-    res.status(400).send({
-      message: "Content can not be empty!",
-    });
-    return;
-  }
-  var fs = require("fs");
-  var imageData = fs.readFileSync(req.body.image);
+  // if (!req.body.title) {
+  //   res.status(400).send({
+  //     message: "Content can not be empty!",
+  //   });
+  //   return;
+  // }
+
+  // var fs = require("fs");
+  // var imageData = fs.writeFileSync('', req.body.image);
+  // console.log("req.files", req.files);
+  const image = req.files.image;
+  const filename = image.md5 + "." + image.mimetype.split("/")[1];
+  image.mv(path.join(__dirname, "../images/", filename));
+
+  // return res.end("OK");
 
   // Create a Product
   const product = {
-    image: imageData,
+    image: filename,
     description: req.body.description,
     price: req.body.price,
+    categoryId: req.body.categoryId,
   };
-  
+
   // Save Product in the database
   Product.create(product)
     .then((data) => {
@@ -32,6 +40,23 @@ exports.create = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while creating the Tutorial.",
+      });
+    });
+};
+exports.findByCategoryId = (req, res) => {
+  const categoryId = req.params.categoryId;
+
+  Product.findAll({
+    where : {
+      categoryId
+    }
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving product.",
       });
     });
 };

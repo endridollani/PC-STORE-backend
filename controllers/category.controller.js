@@ -1,11 +1,12 @@
 const db = require("../models");
 const Category = db.category;
-const Op = db.Sequelize.Op;
+const SubCategory = db.sub_category;
 
 // Create and Save a new Category
 exports.create = (req, res) => {
+  console.log('req', req.body)
     // Validate request
-    if (!req.body.title) {
+    if (!req.body.name) {
       res.status(400).send({
         message: "Content can not be empty!",
       });
@@ -14,12 +15,14 @@ exports.create = (req, res) => {
   
     // Create a Product
     const category = {
-      title: req.body.title,
+      name: req.body.name,
     };
     // Save Product in the database
     Category.create(category)
       .then((data) => {
-        res.send(data);
+        // res.send(data);
+        // res.set('Location', 'http://localhost:8081');
+        res.end('Kategoria u shtua me suskses, id:' + data.id)
       })
       .catch((err) => {
         res.status(500).send({
@@ -30,7 +33,9 @@ exports.create = (req, res) => {
   };
   // Retrieve all Products from the database.
   exports.findAll = (req, res) => {
-    Category.findAll()
+    Category.findAll({
+      include: SubCategory
+    })
       .then((data) => {
         res.send(data);
       })

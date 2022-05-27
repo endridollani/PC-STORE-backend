@@ -2,7 +2,7 @@ module.exports = {
   HOST: "localhost",
   USER: "endri",
   PASSWORD: "password",
-  DB: "pc-store",
+  DB: "pcstore",
   dialect: "mysql",
   pool: {
     max: 5, //maximum number of connection in pool
