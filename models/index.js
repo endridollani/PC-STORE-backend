@@ -14,5 +14,11 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.tutorials = require("./product.model.js")(sequelize, Sequelize);
+db.product = require("./product.model.js")(sequelize, Sequelize);
+db.category = require("./category.model.js")(sequelize,Sequelize);
+db.sub_category = require("./sub_category.model.js")(sequelize,Sequelize);
+
+db.sub_category.hasMany(db.category);
+db.sub_category.hasOne(db.product);
+
 module.exports = db;
